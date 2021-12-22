@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна робота №5 - Аутентифікація</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/styles/style.css" th:href="@{/styles/style.css}">
+</head>
+<script>
+    function check_file() {
+        const file_d = document.getElementById("file").value;
+        let ext_arr = file_d.split('.');
+        let ext = ext_arr[ext_arr.length - 1];
+
+        if (file_d == '') {
+            alert("Ви не обрали файл.");
+            return false;
+        } else if (ext != "kml" && ext != "gpx") {
+            alert("Ви обрали неправильний файл.\nВиберіть інший файл.");
+            return false;
+        }
+        visibleProgressBar();
+    }
+</script>
+<body>
+
+<table border="1"  cellspacing="0" cellpadding="5">
+    <tr>
+        <td>
+            <div th:inline="text" id="h" th:text="${'Вхід здійснено, '+name}">Вхід здійснено, [[${#httpServletRequest.remoteUser}]]</div></td>
+<!--            <div th:inline="text" id="h">Вхід здійснено, [[${#httpServletRequest.remoteUser}]]</div></td>-->
+        <td>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Вийти"/>
+            </form>
+        </td>
+    </tr>
+
+    <div th:if="${#httpServletRequest.remoteUser == 'admin'}">
+        <tr><td align="center" colspan="2" >
+            <form action="/admin" method="get">
+                <input type="submit" value="Admin"/>
+            </form>
+        </td>
+        </tr>
+    </div>
+
+</table>
+
+<!--/*@thymesVar id="message" type="java.lang.String"*/-->
+<div th:if="${message}">
+    <h4 th:text="${message}"/>
+</div>
+<!--/*@thymesVar id="fileName" type="java.lang.String"*/-->
+<div th:if="${fileName}">
+    <div>
+        <form method="POST" enctype="multipart/form-data" action="/compareTracks">
+            <table style="margin-bottom: 20px" border="1" cellspacing="0" cellpadding="10px">
+
+
+                <tr>
+                    <td><p>Виберіть точність:<input type='range' min='1' max='25' step='1' value='12' id="accuracy"
+                                                    name='accuracy' onmousemove="updateLabel()">
+                    </p>
+                        <div align="center" id="accuracy_label">Обрана точність: 12</div>
+                        <script>
+                            function updateLabel() {
+                                document.getElementById("accuracy_label").innerText = "Обрана точність: " + document.getElementById("accuracy").value;
+                            }
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align='center'><p><input type='submit' th:value="${fileName}" name='submit'
+                                                 value="Порівняти треки"></td>
+                </tr>
+
+            </table>
+        </form>
+    </div>
+</div>
+
+
+<!--/*@thymesVar id="resultList" type="java.lang.Class"*/-->
+<div th:if="${resultList}">
+
+    <!--/*@thymesVar id="idTrack" type="java.lang.String"*/-->
+    <h3 th:text="'Результати порівняння треку '+${idTrack}+' з наявними'"></h3>
+    <h4 th:if="${#lists.isEmpty(resultList)}">Подібних треків з заданою точністю не знайдено.</h4>
+    <div th:if="${not #lists.isEmpty(resultList)}">
+        <h4>Список подібних треків з завантаженим з заданою точністю</h4>
+
+        <table style="margin-top:20px" border="1" cellspacing="0" cellpadding="7">
+            <tr align="center">
+                <td><b>Номер трека</b></td>
+                <td><b>Інформація про трек</b></td>
+            </tr>
+            <tr th:each="res : ${resultList}">
+
+                <td style="font-weight: 600; text-align: center;" th:text="${res.getTrkId()}"></td>
+                <td th:text="'Відсоток схожості: ' + ${res.getPercentageOfSimilarity() +'%'} "></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div>
+    <br/>
+    <form method="POST" enctype="multipart/form-data" action="/uploadForm">
+        <table border="1" cellspacing="0" cellpadding="10px">
+            <tr>
+                <td><h3 align='center' th:text="${message_upload} ">Виберіть kml/gpx файл</h3></td>
+            </tr>
+            <tr>
+                <td><input type='file' name='file' id="file" accept=".kml,.gpx"></td>
+            </tr>
+
+            <tr>
+                <td align='center'>
+                    <input type='submit' value='Завантажити' name='submit'
+                                             onclick='return check_file()' id="upload-button">
+                    <div class='container' id="progress-bar" hidden>
+                        <div class='bar'>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+
+<script>
+    function visibleProgressBar() {
+        document.getElementById("upload-button").hidden = true;
+        document.getElementById("progress-bar").hidden = false;
+    }
+</script>
+<br/>
+<a th:href="@{compare-point}">Порівняти точку з треками</a>
+
+</body>
+</html>
+<!--Author progress bar: https://codepen.io/mog13/pen/qBOEaZP-->

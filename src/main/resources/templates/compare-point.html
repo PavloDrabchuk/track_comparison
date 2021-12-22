@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Порівняння треків та однієї точки</title>
+</head>
+<body>
+
+<div>
+    <form method="POST" enctype="multipart/form-data" th:action="@{/compare-point}">
+        <table style="margin-bottom: 20px" border="1" cellspacing="0" cellpadding="10px">
+
+            <tr>
+                <td colspan="2"><p>Виберіть точність:
+                    <input type='range' min='1' max='25' step='1' value='12' id="accuracy"
+                           name='accuracy' onmousemove="updateLabel()"
+                           th:value="${accuracy} ? ${accuracy} : '12'">
+                </p>
+                    <div align="center" id="accuracy_label"
+                         th:text="${accuracy} ? ${'Обрана точність: '+accuracy} : 'Обрана точність: 12'">Обрана
+                        точність: 12
+                    </div>
+                    <script>
+                        function updateLabel() {
+                            document.getElementById("accuracy_label").innerText = "Обрана точність: " + document.getElementById("accuracy").value;
+                        }
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td>Довгота:</td>
+                <td><input style="width: 100%;" type="number" name="lon" step=0.0000001 min="-180" max="180"
+                           placeholder="Наприклад: 24.6470892." required th:value="${lon}"></td>
+            </tr>
+            <tr>
+                <td>Широта:</td>
+                <td><input style="width: 100%;" type="number" name="lat" step=0.0000001 min="-90" max="90"
+                           placeholder="Наприклад: 48.9117518." required th:value="${lat}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align='center'><p><input type='submit' name='submit' value="Порівняти точку з треками">
+                </td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+
+<div th:if="${resultListComparePoint}">
+    <h2 th:text="${'Результати порівняння точки з координатами, де: довгота = '+lon+', широта = '+lat+'.'}"></h2>
+    <table th:if="${not #lists.isEmpty(resultListComparePoint)}" style="margin-top:20px" border="1" cellspacing="0"
+           cellpadding="7">
+        <tr align="center">
+            <td><b>Номер трека</b></td>
+            <td><b>Інформація про трек</b></td>
+        </tr>
+        <tr th:each="res : ${resultListComparePoint}">
+
+            <td style="font-weight: 600; text-align: center;" th:text="${res.getTrkId()}"></td>
+            <td th:text="'Відсоток схожості: ' + ${res.getPercentageOfSimilarity() +'%'} "></td>
+        </tr>
+    </table>
+    <h3 th:if="${#lists.isEmpty(resultListComparePoint)}">
+        Немає співпадіть точки з введеними координатами та наявними треками.
+    </h3>
+
+</div>
+
+<br/>
+<a th:href="@{/uploadForm}">Перейти на головну сторінку</a>
+
+</body>
+</html>

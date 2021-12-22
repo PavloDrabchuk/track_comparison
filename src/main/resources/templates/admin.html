@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link rel="stylesheet" type="text/css" media="all" href="/styles/adminStyle.css"
+          th:href="@{/styles/adminStyle.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="/styles/style.css" th:href="@{/styles/style.css}">
+
+    <title>Admin - Hello World!</title>
+
+</head>
+<body>
+
+<h1>Адміністративна частина</h1>
+<table border="1" cellspacing="0" id="exitAndGoToUserPartButton" cellpadding="5px">
+    <tr>
+        <td>
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Вийти"/>
+            </form>
+        </td>
+    </tr>
+    <!--/*@thymesVar id="admin" type="java.lang.String"*/-->
+
+    <tr>
+        <td>
+            <form action="uploadForm" method="get">
+                <input type="submit" value="Перейти до користувацької частини"/>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<div class="adminBlock">
+    <!--/*@thymesVar id="deleteTrack" type="java.lang.String"*/-->
+    <div th:if="${deleteTrack}">
+        <h2 th:text="${deleteTrack}"/>
+    </div>
+
+    <!--/*@thymesVar id="track" type="java.lang.String"*/-->
+    <div th:if="${not #lists.isEmpty(track)}">
+        <h3>Список завантажених треків</h3>
+
+        <div>
+            <form action="/deleteTracks" method="post">
+                <ul>
+                    <!--/*@thymesVar id="track" type="java.lang.String"*/-->
+                    <li th:each="id : ${track}">
+                        <input type="checkbox" th:name="${id}" th:id="${id}" th:value="${id}" th:text="${id}">
+                    </li>
+                </ul>
+                <input type="submit" value="Видалити обрані треки">
+            </form>
+        </div>
+        <div>
+            <form action="/admin" method="get">
+                <!--/*@thymesVar id="numPages" type="java.lang.String"*/-->
+                <input type="submit" th:each="page : ${numPages}" th:value="${page}" th:name="page" id="page">
+            </form>
+        </div>
+    </div>
+    <div th:if="${#lists.isEmpty(track)}">
+        <h3>На сервері немає жодного треку</h3>
+    </div>
+</div>
+
+<div class="adminBlock">
+    <!--/*@thymesVar id="uploadFilesMessage" type="java.lang.String"*/-->
+
+    <h3>Завантаження файлів до основної таблиці</h3>
+
+    <div th:if="${uploadFilesMessage}">
+        <h2 th:text="${uploadFilesMessage}"/>
+    </div>
+
+    <div id="uploadForm">
+        <form method="POST" th:action="@{/admin/uploadFiles}" enctype="multipart/form-data" name="upload">
+
+
+            <table border="1" cellspacing="0" cellpadding="10px">
+                <tr>
+                    <td>
+                        <!--/*@thymesVar id="message_upload" type="java.lang.String"*/-->
+                        <h3 align='center'>Виберіть kml/gpx файли</h3></td>
+                </tr>
+                <tr>
+                    <td><input type="file" name="files" multiple/></td>
+                </tr>
+
+                <tr>
+                    <td align='center'>
+                        <button type="submit" id="upload-button" onclick="visibleProgressBar()">Завантажити</button>
+                        <div class='container' id="progress-bar" hidden>
+                            <div class='bar'>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+        </form>
+    </div>
+
+
+</div>
+<script>
+    function visibleProgressBar() {
+        document.getElementById("upload-button").hidden = true;
+        document.getElementById("progress-bar").hidden = false;
+    }
+</script>
+</body>
+</html>

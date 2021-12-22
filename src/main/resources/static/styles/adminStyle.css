@@ -1,0 +1,18 @@
+body{
+    /*background-color: #e2be9c;*/
+}
+
+#deleteTrack{
+    border: #1d5b16 2px solid;
+}
+
+.adminBlock{
+    border: #1d5b16 2px solid;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#page{
+    margin-top: 7px;
+    margin-right: 3px;
+}

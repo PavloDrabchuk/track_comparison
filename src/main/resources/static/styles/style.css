@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+#leftBlock {
+    width: 25%;
+    height: 100%;
+    overflow: auto;
+    float: left;
+    background-color: #d1e3f3;
+    border-right: #307e7e 5px solid;
+    position: relative;
+}
+
+#mapBlock {
+    width: 75%;
+    height: 100%;
+    overflow: auto;
+    background-color: #defceb;
+}
+
+#uploadForm{
+    position: absolute;
+    bottom: 0;
+    overflow: auto;
+    margin-bottom: 10px;
+    /*position: fixed; */
+    /*left: 0; bottom: 0;*/
+    /*width: auto;*/
+    /*margin: auto;*/
+}
+
+table{
+    margin: 30px;
+}
+tr{
+    margin: 14px;
+    padding: 14px;
+}
+td{
+    margin: 14px;
+    padding: 14px;
+}
+
+
+button {
+
+    border: none;
+    background-color: inherit;
+    padding: 2px 4px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    color: dodgerblue;
+    margin: 1px;
+    user-select: none;
+}
+
+button:hover {
+    background: #eee;
+}
+
+#trkId{
+    background-color: #d6f1d6;
+    border: 3px solid #1a731d;
+    border-radius: 4px;
+    color: #1d5b16;
+    padding: 6px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    /*cursor: pointer;*/
+    font-family: Arial, serif;
+
+}
+
+#resultTable{
+    margin-top: 10px;
+    background-color: aquamarine;
+}
+
+:root {
+    --colour1: #f1c40f;
+    --colour2: #2c3e50;
+    --speed: 4s;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+@keyframes slide {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: 113px;
+    }
+}
+.container {
+    /*height: 100%;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+}
+.container .bar {
+    min-height: 20px;
+    border-radius: 10px;
+    width: calc(113px * 2);
+    box-shadow: 0px 10px 13px -6px #2c3e50;
+    background-color: var(--colour2);
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, var(--colour1) 20px, var(--colour1) 40px);
+    animation: slide var(--speed) linear infinite;
+    will-change: background-position;
+}
+@media only screen and (max-width: 450px) {
+    .container .bar {
+        width: calc(113px * 3);
+    }
+}
+@media only screen and (max-width: 350px) {
+    .container .bar {
+        width: calc(113px * 2);
+    }
+}

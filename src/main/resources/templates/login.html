@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="ua">
+<head>
+    <title>Spring Security Example </title>
+    <!--    <link rel="stylesheet" type="text/css" media="all" href="/styles/btn.css" th:href="@{/styles/btn.css}">-->
+
+</head>
+<body>
+<div th:if="${param.error}">
+    Ви ввели неправильний логін або пароль.
+</div>
+<div th:if="${param.logout}">
+    Ви вийшли з свого аккаунту.
+</div>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <form th:action="@{/login}" method="post">
+
+        <tr>
+            <td>Логін:</td>
+            <td><input type="text" name="username"/></td>
+        </tr>
+        <tr>
+            <td>Пароль:</td>
+            <td><input type="password" name="password"/></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <div><input type="submit" value="Ввійти"/></div>
+            </td>
+        </tr>
+    </form>
+    <tr>
+        <td colspan="2" align="center">
+
+            <!--<a th:href="@{/oauth2/authorization/google}">Login with Google</a>-->
+
+            <button onclick="location.href='/oauth2/authorization/google'" type="button">
+                <img class="google-icon"
+                     src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                     style="vertical-align: middle" alt="Google logo"/>
+                Login with Google
+            </button>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
